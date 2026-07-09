@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link2, MousePointerClick, BarChart3 } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { toast } from "sonner";
 import { StatCard } from "@/components/sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { analyticsApi } from "@/lib/api";
@@ -11,11 +12,19 @@ import type { DashboardData } from "@/types";
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     analyticsApi.dashboard()
-      .then((res) => setData(res.data))
-      .catch(() => setData({ totalLinks: 0, totalClicks: 0, topLinks: [], clicksLast7Days: [] }))
+      .then((res) => {
+        setData(res.data);
+        setError(false);
+      })
+      .catch(() => {
+        setError(true);
+        setData(null);
+        toast.error("Could not load dashboard data");
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -34,6 +43,12 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-zinc-500">Overview of your shortened links</p>
       </div>
+
+      {error && (
+        <p className="rounded-md bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+          Dashboard data is temporarily unavailable. Your links page may still show the correct link count.
+        </p>
+      )}
 
       <div className="grid gap-4 md:grid-cols-3">
         <StatCard title="Total Links" value={data?.totalLinks ?? 0} icon={Link2} />
