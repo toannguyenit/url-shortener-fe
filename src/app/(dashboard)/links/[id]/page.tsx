@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { analyticsApi, urlsApi } from "@/lib/api";
@@ -19,20 +20,34 @@ export default function LinkDetailPage() {
   const [analytics, setAnalytics] = useState<UrlAnalytics | null>(null);
   const [geo, setGeo] = useState<GeoCount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [analyticsError, setAnalyticsError] = useState(false);
 
   useEffect(() => {
-    Promise.all([
-      urlsApi.get(id),
-      analyticsApi.urlAnalytics(id),
-      analyticsApi.geoAnalytics(id),
-    ])
-      .then(([urlRes, analyticsRes, geoRes]) => {
+    const load = async () => {
+      try {
+        const urlRes = await urlsApi.get(id);
         setUrl(urlRes.data);
+      } catch {
+        setUrl(null);
+        return;
+      } finally {
+        setLoading(false);
+      }
+
+      try {
+        const [analyticsRes, geoRes] = await Promise.all([
+          analyticsApi.urlAnalytics(id),
+          analyticsApi.geoAnalytics(id),
+        ]);
         setAnalytics(analyticsRes.data);
         setGeo(geoRes.data);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      } catch {
+        setAnalyticsError(true);
+        toast.error("Could not load analytics data");
+      }
+    };
+
+    load();
   }, [id]);
 
   if (loading) return <div className="flex h-64 items-center justify-center">Loading...</div>;
@@ -59,6 +74,12 @@ export default function LinkDetailPage() {
           <p className="truncate text-zinc-500">{url.longUrl}</p>
         </div>
       </div>
+
+      {analyticsError && (
+        <p className="rounded-md bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+          Analytics temporarily unavailable. Click count below may still update after refreshing the links page.
+        </p>
+      )}
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card>

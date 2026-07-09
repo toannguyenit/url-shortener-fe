@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Copy, ExternalLink, Pencil, QrCode, Trash2 } from "lucide-react";
+import { Copy, ExternalLink, Pencil, QrCode, Share2, Trash2, BarChart3 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +35,19 @@ export default function LinksPage() {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success("Copied!");
+  };
+
+  const shareLink = async (shortUrl: string) => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Short link", url: shortUrl });
+      } else {
+        window.open(shortUrl, "_blank", "noopener,noreferrer");
+        toast.success("Opened in new tab");
+      }
+    } catch {
+      // user cancelled native share
+    }
   };
 
   const handleDelete = async () => {
@@ -123,8 +136,11 @@ export default function LinksPage() {
                       </td>
                       <td className="py-3">
                         <div className="flex gap-1">
-                          <Button size="icon" variant="ghost" onClick={() => copyToClipboard(link.shortUrl)}>
+                          <Button size="icon" variant="ghost" onClick={() => copyToClipboard(link.shortUrl)} title="Copy link">
                             <Copy className="h-4 w-4" />
+                          </Button>
+                          <Button size="icon" variant="ghost" onClick={() => shareLink(link.shortUrl)} title="Share / open link">
+                            <Share2 className="h-4 w-4" />
                           </Button>
                           <Dialog>
                             <DialogTrigger asChild>
@@ -139,13 +155,16 @@ export default function LinksPage() {
                               </div>
                             </DialogContent>
                           </Dialog>
-                          <Button size="icon" variant="ghost" onClick={() => openEdit(link)}>
+                          <Button size="icon" variant="ghost" onClick={() => openEdit(link)} title="Edit">
                             <Pencil className="h-4 w-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" asChild>
+                          <Button size="icon" variant="ghost" asChild title="View analytics">
                             <Link href={`/links/${link.id}`}>
-                              <ExternalLink className="h-4 w-4" />
+                              <BarChart3 className="h-4 w-4" />
                             </Link>
+                          </Button>
+                          <Button size="icon" variant="ghost" onClick={() => window.open(link.shortUrl, "_blank")} title="Open short link">
+                            <ExternalLink className="h-4 w-4" />
                           </Button>
                           <Button size="icon" variant="ghost" onClick={() => setDeleteLink(link)}>
                             <Trash2 className="h-4 w-4 text-red-500" />
