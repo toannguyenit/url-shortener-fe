@@ -10,6 +10,7 @@ import {
   LogOut,
   Scissors,
 } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 import { cn } from "@/lib/utils";
 import { clearTokens, getUser } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -32,9 +33,8 @@ export function Sidebar() {
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex h-16 items-center gap-2 border-b border-zinc-200 px-6 dark:border-zinc-800">
-        <Link2 className="h-6 w-6" />
-        <span className="text-lg font-bold">ShortLink</span>
+      <div className="flex h-16 items-center border-b border-zinc-200 px-6 dark:border-zinc-800">
+        <BrandLogo size="sm" />
       </div>
       <nav className="flex-1 space-y-1 p-4">
         {navItems.map((item) => {

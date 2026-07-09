@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" fill="none" role="img" aria-label="ShortLink">
+  <rect width="64" height="64" rx="14" fill="#18181b"/>
+  <circle cx="18" cy="32" r="7" stroke="#fafafa" stroke-width="3"/>
+  <circle cx="46" cy="32" r="7" stroke="#fafafa" stroke-width="3"/>
+  <path d="M25 32h6" stroke="#6366f1" stroke-width="4" stroke-linecap="round"/>
+  <path d="M33 28l6 4-6 4" stroke="#6366f1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="76" y="42" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700" fill="#18181b">Short</text>
+  <text x="158" y="42" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="700" fill="#6366f1">Link</text>
+</svg>
