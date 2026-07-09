@@ -32,8 +32,8 @@ jobs:
           context: .
           push: true
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ vars.API_URL }}
-            NEXT_PUBLIC_SHORT_URL_BASE=${{ vars.SHORT_URL_BASE }}
+            NEXT_PUBLIC_API_URL=${{ vars.API_URL || 'https://api-urlshort.toannguyenit.cloud' }}
+            NEXT_PUBLIC_SHORT_URL_BASE=${{ vars.SHORT_URL_BASE || 'https://go-urlshort.toannguyenit.cloud' }}
           tags: |
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
@@ -48,9 +48,9 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd /opt/url-shortener
-            docker compose -f app/docker-compose.yml pull frontend
-            docker compose -f app/docker-compose.yml up -d --remove-orphans frontend nginx
+            docker compose --env-file .env -f app/docker-compose.yml pull frontend
+            docker compose --env-file .env -f app/docker-compose.yml up -d --remove-orphans frontend nginx
             docker image prune -f
