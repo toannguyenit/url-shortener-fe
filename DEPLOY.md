@@ -234,11 +234,12 @@ curl -s https://urlshort.toannguyenit.cloud/_next/static/chunks/1t29acn7-o4p6.js
 |--------|-------------|-----------|
 | "Cannot connect... port 8080" | Image build với localhost | Rebuild với `NEXT_PUBLIC_API_URL` đúng (mục 8) |
 | `missing server host` (Actions) | Thiếu `VPS_HOST` | Thêm Secrets |
-| Deploy fail, build OK | Thiếu `VPS_PASSWORD` | Thêm Secret password |
-| `403` pull image | Package private | Public package hoặc `docker login ghcr.io` |
+| Deploy fail, build OK | Thiếu `VPS_PASSWORD` | Thêm Secret `VPS_PASSWORD` (mật khẩu SSH VPS) |
+| `403` pull image | Package private | Public **từng** package trên GitHub Packages |
 | Trang trắng / 502 | nginx hoặc FE down | `docker logs urlshortener-frontend` |
 | CORS error (khác 8080) | Sai `FRONTEND_URL` trên VPS `.env` | Sửa BE `.env`, restart gateway |
 | Đổi domain nhưng FE vẫn URL cũ | Chưa rebuild | Run workflow + pull image mới |
+| Analytics không có click | RabbitMQ lỗi | Xem logs `urlshortener-analytics`; kiểm tra `RABBITMQ_VHOST` |
 
 ---
 
@@ -254,6 +255,14 @@ Xem thêm: [STARTUP.md](./STARTUP.md) (phát triển local).
 
 ---
 
+## Liên kết tài liệu
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md) — cấu trúc & tech stack frontend
+- [Backend DEPLOY.md](https://github.com/toannguyenit/url-shortener-be/blob/main/DEPLOY.md) — VPS, DNS, SSL, infra
+- [Backend ARCHITECTURE.md](https://github.com/toannguyenit/url-shortener-be/blob/main/ARCHITECTURE.md) — kiến trúc full system
+
+---
+
 ## Checklist FE go-live
 
 - [ ] Variables `API_URL`, `SHORT_URL_BASE` trên GitHub
@@ -263,10 +272,4 @@ Xem thêm: [STARTUP.md](./STARTUP.md) (phát triển local).
 - [ ] Bundle JS không còn `localhost:8080`
 - [ ] Đăng ký / đăng nhập / tạo link OK trên browser
 
----
-
-## Liên kết
-
-- [Backend DEPLOY.md](https://github.com/toannguyenit/url-shortener-be/blob/main/DEPLOY.md) — VPS, DNS, SSL, infra, backend services
-- [Backend STARTUP.md](https://github.com/toannguyenit/url-shortener-be/blob/main/STARTUP.md) — chạy local full stack
-- Live: https://urlshort.toannguyenit.cloud
+**Live:** https://urlshort.toannguyenit.cloud

@@ -2,8 +2,9 @@
 
 Modern URL shortener dashboard built with Next.js 16, TypeScript, Tailwind CSS, and shadcn/ui-style components.
 
+> **Kiến trúc & tech stack:** [ARCHITECTURE.md](./ARCHITECTURE.md)  
 > **Deploy production (VPS):** [DEPLOY.md](./DEPLOY.md)  
-> **Hướng dẫn start local (FE + BE):** [STARTUP.md](./STARTUP.md) | [Backend STARTUP](https://github.com/toannguyenit/url-shortener-be/blob/main/STARTUP.md)
+> **Hướng dẫn start local:** [STARTUP.md](./STARTUP.md) | [Backend STARTUP](https://github.com/toannguyenit/url-shortener-be/blob/main/STARTUP.md)
 
 ## Features
 
