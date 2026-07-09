@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# URL Shortener Frontend
 
-## Getting Started
+Modern URL shortener dashboard built with Next.js 16, TypeScript, Tailwind CSS, and shadcn/ui-style components.
 
-First, run the development server:
+> **Hướng dẫn start đầy đủ (FE + BE):** xem [STARTUP.md](./STARTUP.md) hoặc [../url-shortener-be/STARTUP.md](../url-shortener-be/STARTUP.md)
+
+## Features
+
+- User authentication (register/login with JWT)
+- Shorten URLs with custom alias and expiry
+- Link management (CRUD, activate/deactivate)
+- QR code generation
+- Analytics dashboard with charts (Recharts)
+- Geographic click distribution
+- Dark mode support
+
+## Prerequisites
+
+- Node.js 20+
+- Backend API running on http://localhost:8080
+
+## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.local.example .env.local
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Default | Description |
+|----------|---------|-------------|
+| NEXT_PUBLIC_API_URL | http://localhost:8080 | Backend API Gateway URL |
+| NEXT_PUBLIC_SHORT_URL_BASE | http://localhost:8083 | Redirect service base URL |
 
-## Learn More
+## Docker
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+docker build -t url-shortener-fe .
+docker run -p 3000:3000 -e NEXT_PUBLIC_API_URL=http://host.docker.internal:8080 url-shortener-fe
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Route | Description |
+|-------|-------------|
+| `/login` | Sign in |
+| `/register` | Create account |
+| `/dashboard` | Overview with stats and charts |
+| `/shorten` | Create new short link |
+| `/links` | Manage all links |
+| `/links/[id]` | Link analytics detail |
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- Radix UI primitives
+- React Hook Form + Zod
+- Axios with JWT refresh interceptor
+- Recharts
+- qrcode.react
+- Sonner (toasts)
